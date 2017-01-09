@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://bullets/bullet.gd" type="Script" id=1]
+[ext_resource path="res://bullets/fireball.png" type="Texture" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+
+custom_solver_bias = 0.0
+radius = 10.0
+
+[node name="bullet_fireball" type="KinematicBody2D"]
+
+input/pickable = false
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+script/script = ExtResource( 1 )
+attack_force = 2
+
+[node name="Sprite" type="Sprite" parent="."]
+
+texture = ExtResource( 2 )
+region = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+
+rect = Rect2( -10, -10, 20, 20 )
+
+[connection signal="body_enter" from="Area2D" to="." method="_on_Area2D_body_enter"]
+
+[connection signal="exit_screen" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_exit_screen"]
+
+
